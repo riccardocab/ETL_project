@@ -1,0 +1,9 @@
+.DS_Store
+desktop.ini
+.vs/
+.idea/
+.vscode/
+.venv/
+.env
+.ipynb_checkpoints/
+__pycache__
