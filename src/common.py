@@ -1,3 +1,5 @@
+import datetime
+import os
 import pandas as pd
 
 def read_file():
@@ -43,6 +45,35 @@ def caricamento_barra(df,cur,sql):
     print("│ 100% Completato!")
     print("└──────────────────────────────────────────────────┘")
 
-if __name__ == "__main__":
-    read_file()
+def format_cap(df):
+    # Converte in stringa e riempie con zeri fino a 5 cifre
+    if "cap" in df.columns:
+        df["cap"] = df["cap"].astype(str).str.zfill(5)
+    return df
 
+def drop_duplicates(df):
+    print(f"Valori duplicati rimossi: {df.duplicated().sum()}")
+    df.drop_duplicates(inplace=True)
+    return df
+
+def check_null(df):
+    print("Valori nulli per colonna:\n", df.isnull().sum(), "\n")
+    print()
+    return df
+
+def save_processed(df):
+    name = input("Qual'è il nome del file? ").strip().lower()
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    file_name = f"{name}_processed_datetime_{timestamp}.csv"
+    #file_name = name + "processed" + "datetime" + str(datetime.datetime.now())
+    print(file_name)
+    if __name__== "__main__":
+        directory_name = "../data/processed"
+    else:
+        directory_name = "data/processed"
+    df.to_csv(directory_name + file_name, index=False)
+
+if __name__ == "__main__":
+    #print(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) stampa data e ora
+    df = read_file()
+    save_processed(df)

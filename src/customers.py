@@ -3,8 +3,7 @@ import psycopg
 import pandas as pd
 from dotenv import load_dotenv
 
-from src.common import read_file, caricamento_percentuale, caricamento_barra
-
+import src.common as common
 load_dotenv()
 host = os.getenv("host")
 dbname = os.getenv("dbname")
@@ -16,12 +15,20 @@ port = os.getenv("port")
 
 def extract():
     print("Metodo EXTRACT dei clienti")
-    df = read_file()
+    df = common.read_file()
     return df
 
 def transform(df):
-    print(df)
     print("Metodo TRANSFORM dei clienti")
+    df = common.drop_duplicates(df)
+    df = common.check_null(df)
+    df = common.format_cap(df)
+    common.save_processed(df)
+    print(df, end="/n/n")
+    return df
+
+
+    print(df)
     return df
 
 def load(df):
@@ -60,7 +67,7 @@ def load(df):
                        (pk_customer, region, city, cap)
                        VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING;
                        """
-            caricamento_barra(df, cur, sql)
+            common.caricamento_barra(df, cur, sql)
             conn.commit()
 
 
