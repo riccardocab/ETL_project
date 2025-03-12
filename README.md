@@ -40,3 +40,8 @@ _CORSIVO_
 - fk_seller VARCHAR
 - price FLOAT
 - freight (costo trasporto) FLOAT
+
+# TODO OPZIONALE
+- copia del file in input alla cartella raw
+- fare in modo che il nome del file sia univoco
+-Creare database via python
