@@ -21,10 +21,11 @@ def extract():
 def transform(df):
     print("Metodo TRANSFORM dei clienti")
     df = common.drop_duplicates(df)
-    df = common.check_null(df)
+    df = common.check_null(df,["customer_id"])
+    df = common.format_string(df, ["region", "city"])
     df = common.format_cap(df)
     common.save_processed(df)
-    print(df, end="/n/n")
+    print(df)
     return df
 
 
@@ -69,6 +70,14 @@ def load(df):
                        """
             common.caricamento_barra(df, cur, sql)
             conn.commit()
+
+def complete_city_region():
+    with psycopg.connect(host=host, dbname=dbname, user=user, password=password, port=port) as conn:
+
+        sql = """
+        SELECT * FROM 
+        """
+        pass
 
 
 

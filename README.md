@@ -42,6 +42,16 @@ _CORSIVO_
 - freight (costo trasporto) FLOAT
 
 # TODO OPZIONALE
-- copia del file in input alla cartella raw
-- fare in modo che il nome del file sia univoco
--Creare database via python
+- copia del file in input alla cartella raw 
+(fare in modo che il nome del file sia univoco, 
+con data e ora)
+- prima di fare il load creare database da Python
+- controllo di validità per cancellare la tabella
+(con user e psw)
+- metodo per controllo di validità degli input,
+oltre a strip() e upper()/lower()
+- colonna che tracci la data di inserimento dei dati
+- check sui cap >5 cifre (formato 01234)
+- check sulle 20 regioni ammesse
+- integrare dati customer a partire dal cap
+- gestione del tipo di valore da aggiornare in fillNulls ()
