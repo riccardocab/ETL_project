@@ -1,3 +1,4 @@
+import datetime
 import os
 import psycopg
 import pandas as pd
@@ -24,8 +25,7 @@ def transform(df):
     df = common.check_null(df,["customer_id"])
     df = common.format_string(df, ["region", "city"])
     df = common.format_cap(df)
-    common.save_processed(df)
-    print(df)
+    #common.save_processed(df)
     return df
 
 
@@ -33,6 +33,7 @@ def transform(df):
     return df
 
 def load(df):
+    df["last_updated"] = datetime.datetime.now().isoformat(sep=" ", timespec="seconds")
     print("Metodo LOAD dei clienti")
     with psycopg.connect(host=host, dbname=dbname, user=user, password=password, port=port) as conn:
         with conn.cursor() as cur:
@@ -41,7 +42,8 @@ def load(df):
             pk_customer VARCHAR PRIMARY KEY,
             region VARCHAR,
             city VARCHAR,
-            cap VARCHAR
+            cap VARCHAR,
+            last_updated TIMESTAMP
             );
             """
 
@@ -50,7 +52,7 @@ def load(df):
             except psycopg.errors.DuplicateTable as ex:
                 conn.commit()
                 print(ex)
-                domanda = input("Vuoi cancellare la tabella? si/no")
+                domanda = input("Vuoi cancellare la tabella? si/no").lower().strip()
                 if domanda == "si":
                 #Se risponde si, cancellare tabella
                     sqldelete = """
@@ -64,28 +66,62 @@ def load(df):
 
 
             sql = """
-                       INSERT INTO customers
-                       (pk_customer, region, city, cap)
-                       VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING;
-                       """
+            INSERT INTO customers
+            (pk_customer, region, city, cap, last_updated)
+            VALUES (%s, %s, %s, %s, %s) ON CONFLICT (pk_customer) DO UPDATE SET 
+            (region, city, cap, last_updated) = (EXCLUDED.region, EXCLUDED.city, EXCLUDED.cap, EXCLUDED.last_updated);
+            """
             common.caricamento_barra(df, cur, sql)
             conn.commit()
 
 def complete_city_region():
     with psycopg.connect(host=host, dbname=dbname, user=user, password=password, port=port) as conn:
+        with conn.cursor() as cur:
 
-        sql = """
-        SELECT * FROM 
-        """
-        pass
+            sql = f"""
+            UPDATE customers c1
+            SET region = c2.region, last_updated = '{datetime.datetime.now().isoformat(sep=" ", timespec="seconds")}'
+            FROM customers c2
+            WHERE c1.cap = c2.cap 
+            AND c1.cap <> 'NaN' 
+            AND c2.cap <> 'NaN'
+            AND c1.region = 'NaN' 
+            AND c2.region <> 'NaN'
+            RETURNING *;
+            """
 
+            cur.execute(sql)
 
+            print("Record con regione aggiornata")
 
+            for record in cur:
+                print(record)
+
+            sql = f"""
+                UPDATE customers c1
+                SET city = c2.city, last_updated = 
+                '{datetime.datetime.now().isoformat(sep=" ", timespec="seconds")}'
+                FROM customers c2
+                WHERE c1.cap = c2.cap 
+                AND c1.cap <> 'NaN' 
+                AND c2.cap <> 'NaN'
+                AND c1.city = 'NaN' 
+                AND c2.city <> 'NaN'
+                RETURNING *;
+                """
+
+            cur.execute(sql)
+
+            print("Record con city aggiornata")
+
+            for record in cur:
+                 print(record)
 
 def main ():
     print("Metodo MAIN dei clienti")
     df = extract()
     df = transform(df)
+    print("Dati trasformati")
     load(df)
 
 if __name__ == "__main__":
