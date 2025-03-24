@@ -34,7 +34,7 @@ def load(df):
         with conn.cursor() as cur:
 
             sql = """
-                CREATE TABLE IF NOT EXISTS orders_products (
+                CREATE TABLE orders_products (
                 pk_order_product SERIAL PRIMARY KEY,
                 fk_order VARCHAR ,
                 order_item INTEGER,

@@ -33,11 +33,10 @@ if __name__ == "__main__":
             cg.load(df_categories)
         elif response == 5:
             df_products = p.extract()
-            print("First you need to clean the file, for execute ETL")
-            df_products = p.raw_load(df_products)
-            df_products = p.extract()
             df_products = p.transform(df_products)
-            p.load(df_products)
+            df_products = p.raw_load(df_products)
+            #df_products = p.extract()
+            #p.load(df_products)
         elif response == 6:
             df_orders = o.extract()
             df_orders = o.transform(df_orders)

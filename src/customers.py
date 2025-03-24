@@ -54,7 +54,7 @@ def load(df):
                 delete = input("Do you want to delete table? Y/N ").upper().strip()
                 if delete == "Y":
                     sql_delete = """ 
-                    DROP TABLE customers;
+                    DROP TABLE customers CASCADE;
                     """
                     cur.execute(sql_delete)
                     conn.commit()
