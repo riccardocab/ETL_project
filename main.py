@@ -5,6 +5,7 @@ import src.products as p
 import src.categories as cg
 import src.orders as o
 import src.orders_products as op
+import src.sellers as s
 
 if __name__ == "__main__":
     response = -1
@@ -17,7 +18,8 @@ if __name__ == "__main__":
         -5: Run ELT of products
         -6: Run ETL of orders
         -7: Run ETL of orders_products
-        -8 Run Format  delivered
+        -8: Run Format  delivered
+        -9: Run ETL of sellers
         -0: Exit \n"""))
         if response == 1:
             df_customers = c.extract()
@@ -47,5 +49,9 @@ if __name__ == "__main__":
             op.load(df_orders_product)
         elif response == 8:
             op.delete_invalid_order()
+        elif response == 9:
+            df_sellers = s.extract()
+            df_sellers = s.transform(df_sellers)
+            s.load(df_sellers)
         else:
             response = 0
