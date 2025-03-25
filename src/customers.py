@@ -121,6 +121,27 @@ def integrate_city_region():
             print("Updated successfully!")
             conn.commit()
 
+def find_customer_by_city_or_region():
+    select_region_or_city = input("Quale città o quale regione vuoi cercare")
+    print("---SHOW CUSTOMERS BY CITY OR REGION---")
+    with psycopg.connect(host=host, dbname=dbname, user=user, password=password, port=port) as conn:
+        with conn.cursor() as cur:
+
+            sql = f"""
+            SELECT *
+            FROM customers
+            WHERE region = '{select_region_or_city}' OR city = '{select_region_or_city}';
+            """
+            cur.execute(sql)
+            if cur.rowcount == 0:
+                print(f"No RECORD for {select_region_or_city}")
+            else:
+                print(f"Found {cur.rowcount} records for {select_region_or_city}")
+
+                for record in cur:
+                    print(record)
+                conn.commit()
+
 
 def main():
     df = extract()
