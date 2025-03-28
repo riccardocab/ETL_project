@@ -1,57 +1,57 @@
-# TITOLO
-## SOTTOTITOLO
+## Project work Olist - Data Engineer
 
-**GRASSETTO**
-_CORSIVO_
 
-**customers**
-- pk_customer VARCHAR
-- region VARCHAR
-- city VARCHAR
-- cap VARCHAR
+## Descrizione
+In questo progetto sono stati sviluppati gli ETL (Extract, Transform, Load) per la gestione e l'elaborazione dei dati relativi a clienti, categorie, prodotti, ordini e venditori. Include anche un'interfaccia grafica per facilitare l'esecuzione delle operazioni.
 
-**categories**
-- pk_category SERIAL
-- name(ENG) VARCHAR
+## Funzionalità
+- **ETL per diversi dataset**: clienti, categorie, prodotti, ordini, venditori e relazioni tra ordini e prodotti.
+- **Formattazione e integrazione dati**: gestione delle regioni e associazione città-regione.
+- **Anteprima con Jupyter Notebook**: permette di aprire file `.ipynb` direttamente dall'interfaccia.
+- **Integrazione con Power BI**: facilita l'apertura di progetti Power BI `.pbix` per l'analisi dei dati.
 
-**products**
-- pk_product VARCHAR
-- fk_category INT
-- name_length INT
-- description_length INT
-- imgs_qty INT
-- 
-**orders**
-- pk_orders VARCHAR
-- fk_customer VARCHAR
-- status VARCHAR
-- purchase_timestamp TIMESTAMP
-- delivered_timestamp TIMESTAMP
-- estimated_date DATE
+## Requisiti
+- **Python 3.x**
+- Librerie necessarie installabili con:
+  ```
+  pip install -r requirements.txt
+  ```
+- **Jupyter Notebook** (se si desidera aprire file `.ipynb`)
+- **Power BI Desktop** (se si intende aprire file `.pbix` altrimenti visionare il pdf)
 
-**sellers**
-- pk_seller VARCHAR
-- region VARCHAR
+## Installazione
+1. Clonare il repository o scaricare i file.
+   ```bash
+   git clone <repository-url>
+   ```
+2. Installare moduli:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Avviare l'applicazione:
+   ```bash
+   python main.py
+   ```
 
-**orders products**
-- pk_order_product VARCHAR
-- fk_order VARCHAR 
-- fk_product VARCHAR
-- fk_seller VARCHAR
-- price FLOAT
-- freight (costo trasporto) FLOAT
+## Utilizzo
+1. Avviare `main.py` per aprire l'interfaccia grafica.
+2. Selezionare le operazioni ETL disponibili.
+3. Per l'analisi dati, utilizzare i pulsanti per aprire Jupyter Notebook o Power BI.
 
-# TODO OPZIONALE
-- copia del file in input alla cartella raw 
-(fare in modo che il nome del file sia univoco, 
-con data e ora)
-- prima di fare il load creare database da Python
-- controllo di validità per cancellare la tabella
-(con user e psw)
-- metodo per controllo di validità degli input,
-oltre a strip() e upper()/lower()
-- colonna che tracci la data di inserimento dei dati
-- check sui cap >5 cifre (formato 01234)
-- check sulle 20 regioni ammesse
-- integrare dati customer a partire dal cap
-- gestione del tipo di valore da aggiornare in fillNulls ()
+## Struttura del progetto
+```
+project-work/
+│── main.py                 # Interfaccia grafica e gestione operazioni ETL
+│── src/
+│   ├── common.py           # Funzioni comuni
+│   ├── etl/
+│   │   ├── customers.py    # ETL per clienti
+│   │   ├── categories.py   # ETL per categorie
+│   │   ├── products.py     # ETL per prodotti
+│   │   ├── orders.py       # ETL per ordini
+│   │   ├── sellers.py      # ETL per venditori
+│   │   ├── orders_products.py  # ETL per relazioni ordini-prodotti
+```
+
+## Autore
+- Riccardo Cabriolu
